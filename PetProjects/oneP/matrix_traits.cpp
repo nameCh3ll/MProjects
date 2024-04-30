@@ -13,11 +13,11 @@ struct false_type {
 };
 
 template <size_t Rows, size_t Cols> struct is_square {
-  using value_type = Square_tag;
+  using value_type = NotSquare_tag;
 };
 
 template <size_t N> struct is_square<N, N> {
-  using value_type = NotSquare_tag;
+  using value_type = Square_tag;
 };
 
 template <size_t Rows, size_t Cols>

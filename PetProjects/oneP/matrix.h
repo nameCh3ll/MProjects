@@ -14,6 +14,11 @@
 
 #define DEFAULT_ARGUMENTS_MATRIX otherRows, otherCols, otherT, otherAlloc
 
+#define ENABLE_IF_COMPATIBLE_MATRICES                                          \
+  typename =                                                                   \
+      std::enable_if_t<std::conjunction_v<is_compatible<Cols, otherRows>,      \
+                                          std::is_same<T, otherT>>>
+
 #define ENABLE_IF_EQUAL_MATRIX                                                 \
   typename = std::enable_if_t<                                                 \
       std::conjunction_v<is_same_matrix<Rows, Cols, otherRows, otherCols>,     \
@@ -22,6 +27,7 @@
 template <size_t Rows, size_t Cols, typename T = double,
           typename Alloc = std::allocator<T>>
 class Matrix {
+  static constexpr size_t SIZE = Rows * Cols;
   T *_arr;
   [[no_unique_address]] Alloc _alloc;
 
@@ -67,82 +73,69 @@ public:
   using iterator = base_iterator<false>;
 
   // TODO::sfinae have a construct default
-  Matrix() : _arr(Allocator_traits::allocate(_alloc, Rows * Cols)) {
-    for (size_t i = 0, end = Rows * Cols; i < end; ++i) {
+  Matrix() : _arr(Allocator_traits::allocate(_alloc, SIZE)) {
+    for (size_t i = 0; i < SIZE; ++i) {
       Allocator_traits::construct(_alloc, _arr + i, T());
     }
   }
 
   ~Matrix() {
-    for (size_t i = 0, end = Rows * Cols; i < end; ++i) {
+    for (size_t i = 0; i < SIZE; ++i) {
       Allocator_traits::destroy(_alloc, _arr + i);
     }
-    Allocator_traits::deallocate(_alloc, _arr, Rows * Cols);
+    Allocator_traits::deallocate(_alloc, _arr, SIZE);
   }
 
-  // why const choise default copy constrct.
-  template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>
-  Matrix(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) : Matrix() {
-    for (size_t i = 0, end = Rows * Cols; i < end; ++i) {
+  Matrix(const Matrix &other) : Matrix() {
+    for (size_t i = 0; i < SIZE; ++i) {
       *(_arr + i) = *(other._arr + i);
     }
     std::cout << __PRETTY_FUNCTION__ << '\n';
   }
 
-  // template <typename = std::enable_if_t<std::false_type::value>>
-  Matrix(const Matrix &other) {
+  Matrix(const Matrix &&other) noexcept : _arr(other._arr) {
+    other._arr = nullptr;
     std::cout << __PRETTY_FUNCTION__ << '\n';
-    for (size_t i = 0, end = Rows * Cols; i < end; ++i) {
-      *(_arr + i) = *(other._arr + i);
-    }
-    std::cout << "SAdadsa";
   }
-  // Matrix(const Matrix &other) = delete;
-  //   for (size_t i = 0, end = Rows * Cols; i < end; ++i) {
-  //     *(_arr + i) = *(other._arr + i);
-  //   }
-  //   std::cout << __PRETTY_FUNCTION__ << '\n';
-  // }
 
-  template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>
-  Matrix &operator=(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) {
-    for (size_t i = 0, end = Rows * Cols; i < end; ++i) {
+  Matrix &operator=(Matrix &other) {
+    this->~Matrix();
+    for (size_t i = 0; i < SIZE; ++i) {
       *(_arr + i) = *(other._arr + i);
     }
     return this;
   }
 
-  template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>
-  Matrix(Matrix<DEFAULT_ARGUMENTS_MATRIX> &&other) noexcept : _arr(other._arr) {
-    other._arr = nullptr;
-  }
-
-  template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>
-  Matrix &operator=(Matrix<DEFAULT_ARGUMENTS_MATRIX> &&other) noexcept {
+  Matrix &operator=(Matrix &&other) noexcept {
     this->~Matrix();
     _arr = other._arr;
     other._arr = nullptr;
     return this;
   }
 
+  template <DEFAULT_TEMPLATE_MATRIX>
+  Matrix(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) = delete;
+
+  template <DEFAULT_TEMPLATE_MATRIX>
+  Matrix &operator=(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) = delete;
+
+  template <DEFAULT_TEMPLATE_MATRIX>
+  Matrix(Matrix<DEFAULT_ARGUMENTS_MATRIX> &&other) = delete;
+
   Matrix &transpose();
 
   // TODO: sfinae have a oprator *.
-  template <DEFAULT_TEMPLATE_MATRIX,
-            typename = std::enable_if_t<std::conjunction_v<
-                is_compatible<Cols, otherRows>, std::is_same<T, otherT>>>>
-  Matrix<Rows, otherCols, otherT, otherAlloc>
-  operator*(Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) {}
+  template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_COMPATIBLE_MATRICES>
+  Matrix<Rows, otherCols, T, Alloc>
+  operator*(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) {}
 
   iterator begin() const { return iterator(_arr); }
 
-  iterator end() const { return iterator(_arr + Rows * Cols + 1); };
+  iterator end() const { return iterator(_arr + SIZE + 1); };
 
   const_iterator cbegin() const { return const_iterator(_arr); }
 
-  const_iterator cend() const {
-    return const_iterator(_arr + Rows * Cols + 1);
-  };
+  const_iterator cend() const { return const_iterator(_arr + SIZE + 1); };
 };
 
 template <size_t N, typename T> using SquareMatrix = Matrix<N, N, T>;
