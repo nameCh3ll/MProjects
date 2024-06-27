@@ -10,8 +10,7 @@ using namespace std;
 vector<int> sum_count(73);
 
 unsigned int f(unsigned int n) {
-  if (n <= 1)
-    return 1;
+  if (n <= 1) return 1;
   return n * f(n - 1);
 }
 

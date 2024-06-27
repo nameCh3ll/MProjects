@@ -8,7 +8,9 @@ int main() {
   const size_t len_number = pow(10, 13);
   const size_t N = 100000;
   unsigned long long value;
+
   vector<unsigned long long> F{0, 1, 2, 3};
+
   for (size_t i = F.size() - 1; i != 25; ++i) {
     F.push_back(F[i] * 2 % len_number);
   }

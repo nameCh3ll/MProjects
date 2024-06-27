@@ -1,20 +1,21 @@
+#include <cstdlib>
+
 #include "./debug.h"
 #include "./matrix.h"
-#include <cstdlib>
 
 using namespace std;
 
-void f(int a) { cout << __PRETTY_FUNCTION__ << '\n'; }
-
 int main() {
-
-  Matrix<10, 10> a;
-  Matrix<10, 10> b(a);
+  Matrix<2, 3> a;
   for (auto it = a.begin(); it != a.end(); ++it) {
     *it = rand() % 10;
   }
-  for (auto it = a.begin(); it != a.end(); ++it) {
-    cout << *it << '\n';
-  }
+  a.print();
+  cout << endl;
+  Matrix<3, 2> b(a);
+  b.print();
+  cout << endl;
+  Matrix<2, 2> c = a * b;
+  c.print();
   return 1;
 }
