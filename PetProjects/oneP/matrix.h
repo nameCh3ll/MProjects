@@ -13,7 +13,7 @@
 #include "./PoolAllocator.cpp"
 #include "./matrix_traits.cpp"
 
-#define SM (CLS / sizeof(double))
+constexpr size_t SM = 8;
 
 #define DEFAULT_TEMPLATE_MATRIX \
   size_t otherRows, size_t otherCols, typename otherT, typename otherAlloc
@@ -165,6 +165,20 @@ class Matrix {
         *(result._arr + i) += *(this->_arr + i + g) * *(tmp._arr + i + g);
       }
     }
+    return result;
+  }
+
+  Matrix operator*(const Matrix &other) {
+    Matrix<Rows, Rows> result;
+    for (size_t i = 0; i < Rows; i += SM)
+      for (size_t j = 0; j < Rows; j += SM)
+        for (size_t k = 0; k < Rows; k += SM)
+          for (size_t i2 = 0, result._arr = &res[i][j], rmul1 = &mul1[i][k];
+               i2 < SM; ++i2, rres += Rows, rmul1 += Rows)
+            for (size_t k2 = 0, size_t rmul2 = &mul2[k][j]; k2 < SM;
+                 ++k2, rmul2 += Rows)
+              for (j2 = 0; j2 < SM; ++j2)
+                result._arr[j2] += rmul1[k2] * rmul2[j2];
     return result;
   }
 

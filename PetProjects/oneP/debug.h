@@ -1,4 +1,5 @@
 
-template <typename T> struct Debug {
+template <typename T>
+struct Debug {
   Debug() = delete;
 };
