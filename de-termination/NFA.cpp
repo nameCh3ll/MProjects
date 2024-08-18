@@ -1,9 +1,9 @@
 #include "NFA.h"
 
-NFA::NFA(const string& all_alphabet, const string& all_name_state,
-         const string& name_start_state, const string& name_end_state) {
+NFA::NFA(const string &all_alphabet, const string &all_name_state,
+         const string &name_start_state, const string &name_end_state) {
   string new_string;
-  state* new_state;
+  state *new_state;
   this->initial_states = initial_states;
   this->final_states = final_states;
 
@@ -16,7 +16,8 @@ NFA::NFA(const string& all_alphabet, const string& all_name_state,
 
     this->all_alphabet.push_back(new_string);
 
-    if (iterator == all_alphabet.cend()) break;
+    if (iterator == all_alphabet.cend())
+      break;
   }
 
   for (auto iterator = all_name_state.cbegin();; ++iterator) {
@@ -28,7 +29,8 @@ NFA::NFA(const string& all_alphabet, const string& all_name_state,
 
     this->all_name_state.push_back(new_string);
 
-    if (iterator == all_name_state.cend()) break;
+    if (iterator == all_name_state.cend())
+      break;
   }
 
   for (auto iterator = (this->all_name_state).cbegin();
@@ -55,7 +57,8 @@ NFA::NFA(const string& all_alphabet, const string& all_name_state,
     new_string = "";
 
     for (int g = 0; g < this->all_name_state.size(); ++g) {
-      if ((mask & (1 << g)) >> g == 1) new_string += this->all_name_state[g];
+      if ((mask & (1 << g)) >> g == 1)
+        new_string += this->all_name_state[g];
     }
 
     if (new_string.size() != 1) {
@@ -82,8 +85,8 @@ NFA::NFA(const string& all_alphabet, const string& all_name_state,
   DFA[name_start_state]->flag = true;
 }
 
-void NFA::add_new_link(const string& name_state_from, const string& if_letter,
-                       const string& name_state_in) {
+void NFA::add_new_link(const string &name_state_from, const string &if_letter,
+                       const string &name_state_in) {
   // cout << all_states[name_state_from] << '\t' << all_states[name_state_in] <<
   // '\t' << if_letter << endl;
 
@@ -91,11 +94,11 @@ void NFA::add_new_link(const string& name_state_from, const string& if_letter,
 }
 
 void NFA::show_all_states() {
-  for (auto& iterator : DFA) {
+  for (auto &iterator : DFA) {
     if (iterator.second != nullptr) {
       cout << iterator.first /*<< '\t' << iterator.second*/ << endl;
 
-      for (auto& iterator_2 : iterator.second->next_states) {
+      for (auto &iterator_2 : iterator.second->next_states) {
         cout << "  " << p_DFA[iterator_2.first] << "  "
              << iterator_2.second /* << '\t' << iterator_2.first */ << endl;
       }
@@ -140,24 +143,26 @@ void NFA::create_DFA() {
   set<int> int_set;
   string new_string;
 
-  for (auto& current_state : all_states) {
+  for (auto &current_state : all_states) {
     if (current_state.first.size() == 1) {
-      for (auto& current_if_letter : all_alphabet) {
-        for (auto& next_state : current_state.second->next_states) {
+      for (auto &current_if_letter : all_alphabet) {
+        for (auto &next_state : current_state.second->next_states) {
           if (next_state.second == current_if_letter)
             if_letterName_state[current_if_letter] +=
                 p_all_states[next_state.first];
         }
       }
 
-      for (auto& i : if_letterName_state) {
+      for (auto &i : if_letterName_state) {
         // cout << current_state.first << '\t' << i.first << '\t' << i.second <<
         // '\t' << all_states[i.second] << endl;
         new_string = "";
 
-        for (auto& g : i.second) int_set.insert(g);
+        for (auto &g : i.second)
+          int_set.insert(g);
 
-        for (auto& k : int_set) new_string += k;
+        for (auto &k : int_set)
+          new_string += k;
 
         int_set.clear();
 
@@ -173,9 +178,9 @@ void NFA::create_DFA() {
     else {
       // cout << current_state.first << endl;
 
-      for (auto& current_if_letter : all_alphabet) {
-        for (auto& iterator_name_state : (current_state.first)) {
-          for (auto& next_state :
+      for (auto &current_if_letter : all_alphabet) {
+        for (auto &iterator_name_state : (current_state.first)) {
+          for (auto &next_state :
                all_states[string(1, iterator_name_state)]->next_states) {
             if ((next_state.second == current_if_letter &&
                  p_all_states[next_state.first].size() == 1) &&
@@ -190,12 +195,14 @@ void NFA::create_DFA() {
           }
         }
 
-        for (auto& i : if_letterName_state) {
+        for (auto &i : if_letterName_state) {
           new_string = "";
 
-          for (auto& g : i.second) int_set.insert(g);
+          for (auto &g : i.second)
+            int_set.insert(g);
 
-          for (auto& k : int_set) new_string += k;
+          for (auto &k : int_set)
+            new_string += k;
 
           // cout << current_state.first << '\t' << i.first << '\t' <<
           // new_string << '\t' << endl << endl;
@@ -216,8 +223,8 @@ void NFA::create_DFA() {
 }
 
 void NFA::delete_empty_states() {
-  for (auto& current_state : DFA) {
-    for (auto& next_state : current_state.second->next_states) {
+  for (auto &current_state : DFA) {
+    for (auto &next_state : current_state.second->next_states) {
       if (current_state.first != p_DFA[next_state.first]) {
         next_state.first->flag = true;
         // cout << '\t' << p_DFA[next_state.first] << endl;
@@ -225,7 +232,7 @@ void NFA::delete_empty_states() {
     }
   }
 
-  for (auto& current_state : DFA) {
+  for (auto &current_state : DFA) {
     if (current_state.second->flag == false) {
       // cout << current_state.first << endl;
       // cout << DFA[current_state.first] << endl;
@@ -236,7 +243,7 @@ void NFA::delete_empty_states() {
   }
 }
 
-void NFA::set_links(const string& links) {
+void NFA::set_links(const string &links) {
   string current_state, letter, next_state;
 
   for (auto iterator_links = links.cbegin(); iterator_links != links.cend();
@@ -270,7 +277,7 @@ void NFA::set_links(const string& links) {
 }
 
 void NFA::get_end_state() {
-  for (auto& s : DFA) {
+  for (auto &s : DFA) {
     if (s.second != nullptr && s.second->end_state == true &&
         s.second->flag == true)
       cout << s.first << " ";
@@ -278,14 +285,14 @@ void NFA::get_end_state() {
 }
 
 void NFA::get_start_state() {
-  for (auto& s : DFA) {
+  for (auto &s : DFA) {
     if (s.second != nullptr && s.second->start_state == true)
       cout << s.first << " ";
   }
 }
 
 void NFA::show_pointers() {
-  for (auto& s : DFA) {
+  for (auto &s : DFA) {
     cout << s.first << '\t' << s.second << '\n';
   }
 
@@ -294,10 +301,10 @@ void NFA::show_pointers() {
   for (auto& s : all_states) { cout << s.first << '\t' << s.second << '\n'; }*/
 }
 
-void NFA::set_start_state(const string& name_state) {
+void NFA::set_start_state(const string &name_state) {
   DFA[name_state]->start_state = true;
 }
 
-void NFA::set_end_state(const string& name_state) {
+void NFA::set_end_state(const string &name_state) {
   DFA[name_state]->end_state = true;
 }

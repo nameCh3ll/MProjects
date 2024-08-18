@@ -37,5 +37,5 @@ int main() {
   cout << "Final states: ";
   nfa.get_start_state();
   cout << endl;
-  //(1,a,1) (1,a,4) (4,a,4) (4,b,3) (4,b,5) (5,a,3)
+  //(1,a,3) (1,a,4) (4,a,4) (4,b,3) (4,b,5) (5,a,3)
 }
