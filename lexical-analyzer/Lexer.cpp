@@ -27,21 +27,23 @@ bool Lexer::is_num() {
   }
 
   else {
-    int count_numbers = accumulate(
-        new_token.cbegin(), new_token.cend(), 0,
-        [](int answer, const char current) {
-          return ('0' <= current && current <= '9') ? ++answer : answer;
-        });
+    int count_numbers = accumulate(new_token.cbegin(), new_token.cend(), 0,
+                                   [](int answer, const char current) {
+                                     return ('0' <= current && current <= '9')
+                                                ? ++answer
+                                                : answer;
+                                   });
     int count_sum_simbol = accumulate(
         new_token.cbegin(), new_token.cend(), 0,
         [](int answer, const char current) {
           return (current == '-' || current == '+') ? ++answer : answer;
         });
-    int count_e = accumulate(
-        new_token.cbegin(), new_token.cend(), 0,
-        [](int answer, const char current) {
-          return (current == 'E' || current == 'e') ? ++answer : answer;
-        });
+    int count_e = accumulate(new_token.cbegin(), new_token.cend(), 0,
+                             [](int answer, const char current) {
+                               return (current == 'E' || current == 'e')
+                                          ? ++answer
+                                          : answer;
+                             });
     int count_dot = accumulate(new_token.cbegin(), new_token.cend(), 0,
                                [](int answer, const char current) {
                                  return (current == '.') ? ++answer : answer;
@@ -97,7 +99,7 @@ bool Lexer::is_num() {
 bool Lexer::is_kword() {
   return ((find(key_words.cbegin(), key_words.cend(), new_token) !=
            key_words.cend()) ||
-          find_if(new_token.cend(), new_token.cend(), [](const char& curent) {
+          find_if(new_token.cend(), new_token.cend(), [](const char &curent) {
             return !(('A' <= curent && curent <= 'z' &&
                       !('[' <= curent && curent <= '`')) ||
                      curent == '_');
@@ -111,7 +113,7 @@ void Lexer::show_all_token() {
   cout << "|       Lexem       |       Lexeme type     |\n";
   cout << "|-------------------|-----------------------|\n";
 
-  for (const auto& token : all_token) {
+  for (const auto &token : all_token) {
     new_string = "| " + token.first + string(20, ' ');
     new_string.resize(20);
     new_string += "| " + name_states[token.second] + string(20, ' ');
@@ -173,7 +175,8 @@ void Lexer::current_state_is_ID() {
 
   // cout << new_token << endl;
 
-  if (is_kword()) add_token();
+  if (is_kword())
+    add_token();
 
   current_state = H;
 }
