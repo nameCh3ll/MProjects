@@ -10,7 +10,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "./PoolAllocator.cpp"
+#include "./allocator.cpp"
 #include "./matrix_traits.cpp"
 
 constexpr size_t SM = 8;
@@ -130,8 +130,8 @@ public:
     return this;
   }
 
-  // template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>
-  // Matrix(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) = delete;
+  /*template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>*/
+  /*Matrix(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) = delete;*/
 
   template <DEFAULT_TEMPLATE_MATRIX>
   Matrix &operator=(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) = delete;
@@ -165,7 +165,7 @@ public:
     }
     return result;
   }
-
+  int SM = 8;
   Matrix operator*(const Matrix &other) {
     Matrix<Rows, Rows> result;
     for (size_t i = 0; i < Rows; i += SM)
