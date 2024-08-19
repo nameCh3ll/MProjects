@@ -14,7 +14,7 @@ using namespace std;
 enum states { H, ID, NM, ASGN, DLM, ERR };
 
 class Lexer {
- public:
+public:
   ifstream file_txt;
 
   vector<string> name_states{"H", "ID", "NM", "ASGH", "DLM", "ERR"};
@@ -37,7 +37,7 @@ class Lexer {
       {NM, &Lexer::current_state_is_NM},
       {ERR, &Lexer::current_state_is_ERR}};
 
- public:
+public:
   Lexer(string name_file_txt);
 
   char fgetc();

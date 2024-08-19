@@ -1,1 +1,1 @@
-for( a := +10.e212; 		_ghe)
+for(a:=+10.e212;_value)

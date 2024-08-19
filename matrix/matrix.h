@@ -165,7 +165,7 @@ public:
     }
     return result;
   }
-  int SM = 8;
+
   Matrix operator*(const Matrix &other) {
     Matrix<Rows, Rows> result;
     for (size_t i = 0; i < Rows; i += SM)

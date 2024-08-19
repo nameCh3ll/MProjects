@@ -6,9 +6,7 @@ Lexer::Lexer(string name_file_txt) {
 
   if (!file_txt.is_open()) {
     cout << "File opening error\n";
-  }
-
-  else {
+  } else {
     fgetc();
     while (!file_txt.eof()) {
       next_state();
@@ -24,9 +22,7 @@ char Lexer::fgetc() {
 bool Lexer::is_num() {
   if (new_token.empty()) {
     return false;
-  }
-
-  else {
+  } else {
     int count_numbers = accumulate(new_token.cbegin(), new_token.cend(), 0,
                                    [](int answer, const char current) {
                                      return ('0' <= current && current <= '9')
@@ -56,24 +52,20 @@ bool Lexer::is_num() {
          (new_token.size() - (count_sum_simbol + count_e + count_dot))) ||
         count_sum_simbol > 2 || count_e > 1 || count_dot > 1) {
       return false;
-    }
+    } else if (((count_sum_simbol == 1 &&
+                 ((new_token[0] == '+' || new_token[0] == '-') ||
+                  (count_e == 1 && (p_e + 1) != new_token.end() &&
+                   ((*(p_e + 1) == '+') || *(p_e + 1) == '-')))) ||
 
-    else if (((count_sum_simbol == 1 &&
-               ((new_token[0] == '+' || new_token[0] == '-') ||
-                (count_e == 1 && (p_e + 1) != new_token.end() &&
-                 ((*(p_e + 1) == '+') || *(p_e + 1) == '-')))) ||
+                (count_sum_simbol == 2 &&
+                 (new_token[0] == '+' || new_token[0] == '-') &&
+                 (count_e == 1 && (p_e + 1) != new_token.end() &&
+                  ((*(p_e + 1) == '+') || *(p_e + 1) == '-'))) ||
+                count_sum_simbol == 0) &&
 
-              (count_sum_simbol == 2 &&
-               (new_token[0] == '+' || new_token[0] == '-') &&
-               (count_e == 1 && (p_e + 1) != new_token.end() &&
-                ((*(p_e + 1) == '+') || *(p_e + 1) == '-'))) ||
-              count_sum_simbol == 0) &&
-
-             (p_dot < p_e || count_dot == 0)) {
+               (p_dot < p_e || count_dot == 0)) {
       return true;
-    }
-
-    else
+    } else
       return false;
   }
 
