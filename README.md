@@ -7,7 +7,7 @@ ___
 #### Выходные данные:
 > (1,a,34)  (34,b,35)  (34,a,4)  (4,b,35)  (4,a,4)  (35,a,3)
 ### Пример детерминизации:
-![gallery](preview_image/de-termination2.png)
+![gallery](preview_image/black.png)
 
 ___
 
