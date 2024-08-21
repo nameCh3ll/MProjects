@@ -13,8 +13,6 @@
 #include "./allocator.cpp"
 #include "./matrix_traits.cpp"
 
-constexpr size_t SM = 8;
-
 #define DEFAULT_TEMPLATE_MATRIX                                                \
   size_t otherRows, size_t otherCols, typename otherT, typename otherAlloc
 
@@ -47,6 +45,8 @@ class Matrix {
   static constexpr size_t _ROWS{Rows};
   static constexpr size_t _COLS{Cols};
   static constexpr size_t _SIZE = Rows * Cols;
+
+  static constexpr size_t SM = sizeof(T);
 
   T *_arr;
   [[no_unique_address]] Alloc _alloc;
@@ -191,8 +191,6 @@ public:
             rmul2 = other._arr + k * _ROWS + j;
             for (size_t k2 = 0; k2 < SM; ++k2, rmul2 += _ROWS) {
               for (size_t j2 = 0; j2 < SM; ++j2) {
-                /*std::cout << *(rres + j2) << '\t' << *(rmul1 + k2) << '\t'*/
-                /*          << *(rmul2 + j2) << '\n';*/
                 *(rres + j2) += *(rmul1 + k2) * *(rmul2 + j2);
               }
             }

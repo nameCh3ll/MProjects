@@ -1,10 +1,11 @@
 ![mygif](https://media1.tenor.com/m/Ky6v0lFLVXwAAAAd/arch-linux-i-use-arch.gif)
+![mygif](preview_image/arch-linux-i-use-archonline-video-cutter.com-ezgif.com-video-to-gif-converter.gif)
 ___
 
 # Матрицы
 #### Проект в котором я постарался показать все свои знания в c++
 ##### Features:
-* Оптимизация для L1 и L2 кэша.
+* Оптимизация для L1 кэша.
 * Поддержка кастомного аллокатора.
 * ~~Динамический полиморфизм~~.
 * Статический полиморфизм.
