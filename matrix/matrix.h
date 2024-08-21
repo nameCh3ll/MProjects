@@ -25,14 +25,21 @@ constexpr size_t SM = 8;
       std::enable_if_t<std::conjunction_v<is_compatible<Cols, otherRows>,      \
                                           std::is_same<T, otherT>>>
 
+#define ENABLE_IF_NOT_EQUAL_MATRIX                                             \
+  typename = std::enable_if_t<                                                 \
+      !std::conjunction_v<std::is_same<Matrix::matrix_type, Square_tag>,       \
+                          is_same_matrix<Rows, Cols, otherRows, otherCols>,    \
+                          std::is_same<T, otherT>>>
 #define ENABLE_IF_EQUAL_MATRIX                                                 \
-  typename = !std::enable_if_t<                                                \
-      std::conjunction_v<is_same_matrix<Rows, Cols, otherRows, otherCols>,     \
+  typename = std::enable_if_t<                                                 \
+      std::conjunction_v<std::is_same<Matrix::matrix_type, Square_tag>,        \
+                         is_same_matrix<Rows, Cols, otherRows, otherCols>,     \
                          std::is_same<T, otherT>>>
 
 #define PRINT_ALL                                                              \
   std::cout << "Rows:" << Rows << ' ' << "Cols:" << Cols << '\n';              \
-  std::cout << "otherRows:" << otherRows << ' ' << "otherCols:" << otherCols
+  std::cout << "otherRows:" << otherRows << ' ' << "otherCols:" << otherCols   \
+            << '\n'
 
 template <size_t Rows, size_t Cols, typename T = double,
           typename Alloc = std::allocator<T>>
@@ -102,7 +109,6 @@ public:
 
   Matrix(const Matrix &other) : Matrix() {
     memcpy(this->_arr, other._arr, sizeof(other));
-    std::cout << __PRETTY_FUNCTION__ << '\n';
   }
 
   template <DEFAULT_TEMPLATE_MATRIX>
@@ -130,8 +136,8 @@ public:
     return this;
   }
 
-  /*template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>*/
-  /*Matrix(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) = delete;*/
+  // template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>
+  // Matrix(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) = delete;
 
   template <DEFAULT_TEMPLATE_MATRIX>
   Matrix &operator=(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) = delete;
@@ -153,30 +159,48 @@ public:
   }
 
   // TODO: sfinae have a operator *.
-  template <DEFAULT_TEMPLATE_MATRIX> /* , ENABLE_IF_COMPATIBLE_MATRICES> */
+  template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_NOT_EQUAL_MATRIX>
   Matrix<Rows, otherCols, T>
   operator*(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) {
     Matrix<otherCols, otherRows, T> tmp = other.get_transpose();
     Matrix<Rows, otherCols, T> result;
-    for (size_t i = 0; i < _SIZE; ++i) {
-      for (size_t g = 0; g < Cols; ++g) {
-        *(result._arr + i) += *(this->_arr + i + g) * *(tmp._arr + i + g);
+    for (size_t left_rows = 0; left_rows < _ROWS; ++left_rows) {
+      for (size_t right_rows = 0; right_rows < otherCols; ++right_rows) {
+        for (size_t cols = 0; cols < _COLS; ++cols) {
+          *(result._arr + left_rows * otherCols + right_rows) +=
+              *(this->_arr + left_rows * _COLS + cols) *
+              *(tmp._arr + right_rows * _COLS + cols);
+        }
       }
     }
     return result;
   }
 
-  Matrix operator*(const Matrix &other) {
-    Matrix<Rows, Rows> result;
-    for (size_t i = 0; i < Rows; i += SM)
-      for (size_t j = 0; j < Rows; j += SM)
-        for (size_t k = 0; k < Rows; k += SM)
-          for (size_t i2 = 0, result._arr = &res[i][j], rmul1 = &mul1[i][k];
-               i2 < SM; ++i2, rres += Rows, rmul1 += Rows)
-            for (size_t k2 = 0, size_t rmul2 = &mul2[k][j]; k2 < SM;
-                 ++k2, rmul2 += Rows)
-              for (j2 = 0; j2 < SM; ++j2)
-                result._arr[j2] += rmul1[k2] * rmul2[j2];
+  template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>
+  Matrix operator*(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) {
+    Matrix<Rows, Rows, T> result;
+    value_type *rres;
+    value_type *rmul1;
+    value_type *rmul2;
+    for (size_t i = 0; i < _ROWS; i += SM) {
+      for (size_t j = 0; j < _ROWS; j += SM) {
+        for (size_t k = 0; k < _ROWS; k += SM) {
+          rres = result._arr + i * _ROWS + j;
+          rmul1 = this->_arr + i * _ROWS + k;
+          for (size_t i2 = 0; i2 < SM; ++i2, rres += _ROWS, rmul1 += _ROWS) {
+            rmul2 = other._arr + k * _ROWS + j;
+            for (size_t k2 = 0; k2 < SM; ++k2, rmul2 += _ROWS) {
+              for (size_t j2 = 0; j2 < SM; ++j2) {
+                /*std::cout << *(rres + j2) << '\t' << *(rmul1 + k2) << '\t'*/
+                /*          << *(rmul2 + j2) << '\n';*/
+                *(rres + j2) += *(rmul1 + k2) * *(rmul2 + j2);
+              }
+            }
+          }
+        }
+      }
+    }
+
     return result;
   }
 
