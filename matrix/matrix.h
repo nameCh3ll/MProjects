@@ -136,9 +136,6 @@ public:
     return this;
   }
 
-  // template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>
-  // Matrix(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) = delete;
-
   template <DEFAULT_TEMPLATE_MATRIX>
   Matrix &operator=(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) = delete;
 
@@ -221,7 +218,3 @@ public:
 
 template <size_t N, typename T = double, typename Alloc = std::allocator<T>>
 using SquareMatrix = Matrix<N, N, T, Alloc>;
-
-// TODO: optimization matrix for L1 and L2 cahe.
-// TODO: Algorithm of Strassen matrix multiplication.
-// TODO: TODO.
