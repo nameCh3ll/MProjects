@@ -5,7 +5,7 @@ ___
 #### Проект в котором я постарался показать все свои знания в c++
 ##### Features:
 * Оптимизация для L1 кэша для квадратных матриц.
-```
+```cpp
   template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>
   Matrix operator*(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) {
     Matrix<Rows, Rows, T> result;
