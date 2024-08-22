@@ -1,6 +1,6 @@
 ![mygif](https://media1.tenor.com/m/Ky6v0lFLVXwAAAAd/arch-linux-i-use-arch.gif)
 ___
-# :bird: Матрицы :bird: :heavy_minus_sign:
+# :bird: Матрицы :bird: :heavy_minus_sign::heavy_minus_sign::heavy_minus_sign:
 ## Проект в котором я постарался показать все свои знания в c++
 ### Features:
 * Оптимизация для L1 кэша, для квадратных матриц.
