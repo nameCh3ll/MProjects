@@ -1,7 +1,5 @@
 
-![gallery](preview-image/p.gif)
-![gallery](preview-image/arch-linux-i-use-archonline-video-cutter.com-ezgif.com-video-to-gif-converter.gif)
-![mygif](https://media1.tenor.com/m/Ky6v0lFLVXwAAAAd/arch-linux-i-use-arch.gif)
+![mygif](preview-image/preview.gif)
 ___
 # :bird: Матрицы :bird: :heavy_minus_sign::heavy_minus_sign::heavy_minus_sign:
 ### Проект в котором я постарался показать все свои знания в c++
