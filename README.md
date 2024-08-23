@@ -2,7 +2,7 @@
 <p align="center">
   <img src="preview-image/preview.gif">
 </p>
-![mygif](preview-image/preview.gif)
+
 ___
 # :bird: Матрицы :bird: :heavy_minus_sign::heavy_minus_sign::heavy_minus_sign:
 ### Проект в котором я постарался показать все свои знания в c++
