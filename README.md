@@ -1,7 +1,7 @@
 
 ![mygif](preview-image/preview.gif)
 ___
-# :bird: Матрицы :bird: :heavy_minus_sign::heavy_minus_sign::heavy_minus_sign:
+## :bird: Матрицы :bird: :heavy_minus_sign::heavy_minus_sign::heavy_minus_sign:
 ### Проект в котором я постарался показать все свои знания в c++
 #### Features:
 * Оптимизация для L1 кэша, для квадратных матриц.
@@ -15,7 +15,7 @@ ___
 
 ___
 
-# :deciduous_tree: Детерминизация конечного автомата. :deciduous_tree:
+## :deciduous_tree: Детерминизация конечного автомата. :deciduous_tree:
 ### Проект в котором я постарался показать все свои знания в c++
 #### Input data:
 > (1,a,3) (1,a,4) (4,a,4) (4,b,3) (4,b,5) (5,a,3)
@@ -26,7 +26,7 @@ ___
 
 ___
 
-# :vhs: Лексический анализатор. :vhs:
+## :vhs: Лексический анализатор. :vhs:
 ### Input data:
 > for(a:=+10.e212;_value)
 ### Output data(таблица лексем и его идентификатора):
@@ -43,7 +43,7 @@ ___
 
 ___
 
-# :children_crossing: Польская нотация. :children_crossing:
+## :children_crossing: Польская нотация. :children_crossing:
 ### Input data:
 > 123*(1222-12354)*93
 ### Output data:
