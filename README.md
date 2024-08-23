@@ -18,7 +18,6 @@ ___
 * SFINAE.
 * Beautiful templates.
 
-___
 
 <h1 align="center"> :deciduous_tree: Детерминизация конечного автомата. :deciduous_tree: </h1>
 
@@ -30,7 +29,6 @@ ___
 ### Determinization case:
 ![gallery](preview_image/de-termination.png)
 
-___
 
 <h1 align="center">  :vhs: Лексический анализатор. :vhs: </h1>
 
@@ -47,8 +45,6 @@ ___
 | ;                 | DLM                   |
 | _value            | ID                    |
 | )                 | DLM                   |
-
-___
 
 <h1 align="center"> :children_crossing: Польская нотация. :children_crossing: </h1>
 
