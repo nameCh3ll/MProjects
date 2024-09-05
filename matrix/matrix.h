@@ -157,7 +157,7 @@ public:
 
   // TODO: sfinae have a operator *.
   template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_NOT_EQUAL_MATRIX>
-  Matrix<Rows, otherCols, T>
+  [[nodiscard]] Matrix<Rows, otherCols, T>
   operator*(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) {
     Matrix<otherCols, otherRows, T> tmp = other.get_transpose();
     Matrix<Rows, otherCols, T> result;
@@ -174,7 +174,8 @@ public:
   }
 
   template <DEFAULT_TEMPLATE_MATRIX, ENABLE_IF_EQUAL_MATRIX>
-  Matrix operator*(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) {
+  [[nodiscard]] Matrix
+  operator*(const Matrix<DEFAULT_ARGUMENTS_MATRIX> &other) {
     Matrix<Rows, Rows, T> result;
     value_type *rres;
     value_type *rmul1;
