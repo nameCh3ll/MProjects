@@ -26,7 +26,7 @@ ___
 ### Output data:
 > (1,a,34) (34,b,35) (34,a,4) (4,b,35) (4,a,4) (35,a,3)
 ### Determinization case:
-![gallery](preview_image/de-termination.png)
+![gallery](preview-image/de-termination.png)
 
 
 <h1 align="center">  :vhs: Лексический анализатор. :vhs: </h1>
